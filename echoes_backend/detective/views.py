@@ -6,8 +6,10 @@ import os
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
+from django.views.decorators.http import require_GET
 from dotenv import load_dotenv
 from langchain_google_genai import ChatGoogleGenerativeAI
+from uuid import UUID
 
 from .models import Case
 
@@ -275,3 +277,33 @@ Requirements:
             {"error": "Case generation failed. Check the Django terminal."},
             status=502,
         )
+@require_GET
+def get_case(request,case_id):
+    """Return public information for a saved detective case"""
+
+    try:
+        parsed_id = UUID(str(case_id))
+    except (TypeError, ValueError, AttributeError):
+        return JsonResponse(
+            {"error" : "Invalid case id"},
+            status = 400,
+        )
+
+    try:
+        case = Case.objects.get(id=parsed_id)
+    except Case.DoesNotExist:
+        return JsonResponse(
+            {"error" : "Case not found"},
+            status = 404,
+        )
+
+    return JsonResponse(
+        {
+        "id": str(case.id),
+        "title": case.title,
+        "introduction": case.introduction,
+        "crime_scene_description": case.crime_scene_description,
+        "suspects": case.public_data.get("suspects", []),
+        "clues": case.public_data.get("clues", []),
+        }
+    )
