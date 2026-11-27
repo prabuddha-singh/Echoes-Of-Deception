@@ -22,3 +22,13 @@ media/
 .vscode/
 .DS_Store
 Thumbs.db
+
+# Unity generated files
+[Ee]choesUnity/[Ll]ibrary/
+[Ee]choesUnity/[Tt]emp/
+[Ee]choesUnity/[Oo]bj/
+[Ee]choesUnity/[Bb]uild/
+[Ee]choesUnity/[Bb]uilds/
+[Ee]choesUnity/[Ll]ogs/
+[Ee]choesUnity/[Uu]ser[Ss]ettings/
+[Ee]choesUnity/[Mm]emoryCaptures/
